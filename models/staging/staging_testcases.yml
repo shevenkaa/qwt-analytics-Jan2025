@@ -1,0 +1,38 @@
+version: 2
+ 
+models:
+  - name: stg_customers
+    description: master data for customers info
+    columns:
+      - name: customerid
+        description: unique id allocated to each customer
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_order_details
+    description: "{{doc('stg_customers_desc')}}"
+    columns:
+      - name: orderid
+        description: "{{doc('customerid_desc')}}"
+        tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: orderid   
+
+  - name: stg_shipments
+    description: shipment status for each order as received by the customer
+    columns:
+      - name: status
+        description: shipment status based on the current shipment details
+        tests:
+          - accepted_values:
+              values: ['shipped', 'returned', 'ordered', 'replaced']  
+
+  - name: stg_employees
+    description: master data for all the employees of the enterprise
+    columns:
+      - name: empid
+        description: master data for all the employees of the enterprise
+        tests:
+          - is_even                 
